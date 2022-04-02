@@ -3,22 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
 import { HomeService } from './home.service';
-
-const convertsData = (querySnapshot) => {
-  if (!querySnapshot) return [];
-  const data = [];
-  querySnapshot.forEach((doc) => {
-    const item = {
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data()?.createdAt?.toDate(),
-      updatedAt: doc.data()?.updatedAt?.toDate(),
-    };
-    data.push(item);
-  });
-  return data;
-};
-
 @Controller('home')
 export class HomeController {
   constructor(
@@ -28,7 +12,6 @@ export class HomeController {
 
   @Get()
   async getListHomePage(@Res() res: Response) {
-    const data = convertsData(await this.homeService.getHello());
-    return res.json(data);
+    return await this.homeService.getAll(res);
   }
 }
