@@ -12,12 +12,12 @@ export class TitleController {
   ) {}
 
   @Get()
-  async getListTitle(@Res() res: Response) {
-    return await this.titleService.getAll(res);
+  async getAllTitle(@Res() res: Response) {
+    return await this.titleService.getAllTitle(res);
   }
   @Get('/:id')
   async getOneTitle(@Req() req: Request, @Res() res: Response) {
-    return await this.titleService.getOne(req, res);
+    return await this.titleService.getOneTitle(req, res);
   }
   @Get('/:id/view/:idChap')
   async getChapter(@Req() req: Request, @Res() res: Response) {

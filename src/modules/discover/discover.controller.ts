@@ -15,6 +15,14 @@ export class DiscoverController {
   async getAllComic(@Res() res: Response) {
     return await this.discoverService.getAll(res);
   }
+  @Get('/search/:search')
+  async searchTitle(@Req() req: Request, @Res() res: Response) {
+    return await this.discoverService.searchTitle(req, res);
+  }
+  @Get('/author/:author')
+  async searchAuthor(@Req() req: Request, @Res() res: Response) {
+    return await this.discoverService.getTitlesOfAuthor(req, res);
+  }
   @Get('/getMore')
   async paginationPage(@Req() req: Request, @Res() res: Response) {
     return await this.discoverService.getMore(req, res);

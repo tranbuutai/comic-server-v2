@@ -1,9 +1,11 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
-import { Query } from 'firebase-admin/firestore';
+import { Query, Timestamp } from 'firebase-admin/firestore';
 import { ParsedQs } from 'qs';
-import { convertData, convertsData } from 'src/utils';
+
+import { ComicType } from 'src/models';
+import { convertsData } from 'src/utils';
 import { db } from '../../services/firebase';
 
 @Injectable()
@@ -22,7 +24,7 @@ export class DiscoverService {
 
   ORDER_COMIC = 'nameFolder';
 
-  getCursorOnField = async (id) => {
+  getCursorOnField = async (id: string) => {
     const comic = await db.collection('comics').doc(id).get();
     return comic.exists ? comic.data().createdAt : null;
   };
@@ -48,17 +50,59 @@ export class DiscoverService {
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>,
   ) {
-    const { nextPage } = req.query;
+    const nextPage: string = req.query.nextPage as string;
     if (!nextPage) return res.status(200).json([]);
-    const cursor = await this.getCursorOnField(nextPage);
+    const cursor: Timestamp = await this.getCursorOnField(nextPage);
     if (cursor) {
       const comicsRef = db.collection('comics').orderBy('createdAt', 'desc');
-      const comics = convertsData(
+      const comics: Array<ComicType> = convertsData(
         await comicsRef.startAfter(cursor).limit(8).get(),
       );
       return res.status(200).json(comics);
     }
     return res.status(200).json([]);
+  }
+
+  async searchTitle(
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>,
+  ) {
+    try {
+      //uppercase data and database value to easier match each other
+      const data: string = req.params.search.toUpperCase();
+      const comics: Array<ComicType> = convertsData(
+        await db.collection('comics').get(),
+      );
+      let comicsAfterSearch: Array<ComicType> = [];
+      comics.map((comics) => {
+        if (
+          comics.name.vnName.toUpperCase().includes(data) ||
+          comics.name.orgName.toUpperCase().includes(data)
+        ) {
+          comicsAfterSearch.push(comics);
+        }
+      });
+
+      res.status(200).json(comicsAfterSearch);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getTitlesOfAuthor(
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>,
+  ) {
+    try {
+      const author: string = req.params.author;
+
+      const comics: Array<ComicType> = convertsData(
+        await db.collection('comics').where('author', '==', author).get(),
+      );
+      res.status(200).json(comics);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   /// still fixing
@@ -86,11 +130,13 @@ export class DiscoverService {
           this.STATUS[status as string],
         );
       if (nextPage) {
-        const cursor = await this.getCursorOnField(nextPage);
+        const cursor = await this.getCursorOnField(nextPage as string);
         cursor && (filterRef = filterRef.startAfter(cursor));
       }
 
-      const data = convertsData(await filterRef.limit(18).get());
+      const data: Array<ComicType> = convertsData(
+        await filterRef.limit(18).get(),
+      );
       res.status(200).json(data);
     } catch (error) {
       throw new BadRequestException(error.message);

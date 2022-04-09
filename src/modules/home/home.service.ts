@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, Res } from '@nestjs/common';
 import { Response } from 'express';
+
 import { db } from '../../services/firebase';
 import { convertsData } from '../../utils/convertData';
 
@@ -7,7 +8,8 @@ import { convertsData } from '../../utils/convertData';
 export class HomeService {
   async getAll(res: Response<any, Record<string, any>>) {
     try {
-      const comicRef = db.collection('comics');
+      const comicRef: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData> =
+        db.collection('comics');
       const result = await Promise.all([
         comicRef.where('recommended', '==', true).get(),
         comicRef.orderBy('interacts.views', 'desc').limit(6).get(),

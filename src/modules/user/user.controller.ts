@@ -12,7 +12,12 @@ export class UserController {
   ) {}
 
   @Get('/:userId')
-  async getListUserPage(@Req() req: Request, @Res() res: Response) {
+  async getProfileUser(@Req() req: Request, @Res() res: Response) {
+    return await this.userService.getProfile(req, res);
+  }
+
+  @Get('/bookmarks/:userId')
+  async getListBookmarkUser(@Req() req: Request, @Res() res: Response) {
     return await this.userService.getBookmark(req, res);
   }
 }
