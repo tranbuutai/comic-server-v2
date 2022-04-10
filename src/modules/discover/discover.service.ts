@@ -121,8 +121,8 @@ export class DiscoverService {
           (genres as string).split(','),
         );
       if (this.DATE[upload as string] === 'asc')
-        filterRef = filterRef.orderBy('createdAt', 'asc');
-      else filterRef = filterRef.orderBy('createdAt', 'desc');
+        filterRef = filterRef.orderBy('updatedAt', 'asc');
+      else filterRef = filterRef.orderBy('updatedAt', 'desc');
       if (this.STATUS[status as string])
         filterRef = filterRef.where(
           'status',

@@ -11,12 +11,12 @@ export class UserController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get('/:userId')
+  @Get('/profile/:userId')
   async getProfileUser(@Req() req: Request, @Res() res: Response) {
     return await this.userService.getProfile(req, res);
   }
 
-  @Get('/bookmarks/:userId')
+  @Get('/bookmark/:userId')
   async getListBookmarkUser(@Req() req: Request, @Res() res: Response) {
     return await this.userService.getBookmark(req, res);
   }
