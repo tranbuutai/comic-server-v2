@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 
-import { ComicType } from 'src/models';
-import { db } from '../../services/firebase';
+import { ComicType } from '@/models/index';
+import { db } from '@/services/firebase';
 import {
   convertData,
   convertsData,
   getNextAndPrev,
   sortChapters,
-} from '../../utils';
+} from '@/utils/index';
 
 @Injectable()
 export class TitleService {

@@ -4,9 +4,9 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { Query, Timestamp } from 'firebase-admin/firestore';
 import { ParsedQs } from 'qs';
 
-import { ComicType } from 'src/models';
-import { convertsData } from 'src/utils';
-import { db } from '../../services/firebase';
+import { ComicType } from '@/models/index';
+import { convertsData } from '@/utils/index';
+import { db } from '@/services/firebase';
 
 @Injectable()
 export class DiscoverService {
@@ -61,48 +61,6 @@ export class DiscoverService {
       return res.status(200).json(comics);
     }
     return res.status(200).json([]);
-  }
-
-  async searchTitle(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>,
-  ) {
-    try {
-      //uppercase data and database value to easier match each other
-      const data: string = req.params.search.toUpperCase();
-      const comics: Array<ComicType> = convertsData(
-        await db.collection('comics').get(),
-      );
-      let comicsAfterSearch: Array<ComicType> = [];
-      comics.map((comics) => {
-        if (
-          comics.name.vnName.toUpperCase().includes(data) ||
-          comics.name.orgName.toUpperCase().includes(data)
-        ) {
-          comicsAfterSearch.push(comics);
-        }
-      });
-
-      res.status(200).json(comicsAfterSearch);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
-  async getTitlesOfAuthor(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>,
-  ) {
-    try {
-      const author: string = req.params.author;
-
-      const comics: Array<ComicType> = convertsData(
-        await db.collection('comics').where('author', '==', author).get(),
-      );
-      res.status(200).json(comics);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
   }
 
   /// still fixing

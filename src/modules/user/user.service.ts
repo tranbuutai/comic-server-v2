@@ -3,9 +3,9 @@ import { Request, Response } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 
-import { ComicType, ComicWasInteracted, User } from 'src/models';
-import { convertData, convertsData } from 'src/utils';
-import { db } from '../../services/firebase';
+import { ComicType, ComicWasInteracted, User } from '@/models/index';
+import { convertData, convertsData } from '@/utils/index';
+import { db } from '@/services/firebase';
 
 @Injectable()
 export class UserService {

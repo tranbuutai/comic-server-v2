@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, Res } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 
-import { db } from '../../services/firebase';
-import { convertsData } from '../../utils/convertData';
+import { db } from '@/services/firebase';
+import { convertsData } from '@/utils/convertData';
 
 @Injectable()
 export class HomeService {
