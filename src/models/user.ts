@@ -32,11 +32,17 @@ export interface HistoryUser {
   viewed: HistoryViewed[];
 }
 
+export interface GenreUser {
+  name: string;
+  amount: number;
+}
+
 export interface User {
   id?: string;
   providerId: string;
   info: InfoUser;
   histories: HistoryUser;
+  genres: GenreUser[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
@@ -44,4 +50,11 @@ export interface User {
 export interface InsertNewUser {
   providerId: string;
   info: InfoUser;
+}
+
+export interface updateUser {
+  firstName: string | any;
+  lastName: string | any;
+  gender: string;
+  phoneNumber: string;
 }

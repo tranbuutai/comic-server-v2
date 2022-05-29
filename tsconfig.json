@@ -12,11 +12,7 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@/config/*": ["./src/config/*"],
-      "@/models/*": ["./src/models/*"],
-      "@/modules/*": ["./src/modules/*"],
-      "@/services/*": ["./src/services/*"],
-      "@/utils/*": ["./src/utils/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

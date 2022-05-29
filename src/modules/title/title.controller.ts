@@ -4,7 +4,7 @@ import { Response, Request } from 'express';
 
 import { TitleService } from './title.service';
 
-@Controller('title')
+@Controller('titles')
 export class TitleController {
   constructor(
     private readonly titleService: TitleService,
