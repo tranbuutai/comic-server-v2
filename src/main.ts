@@ -1,9 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import * as admin from 'firebase-admin';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './modules';
-import { configService } from './config';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 8088;
@@ -19,8 +18,14 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // /// firebase
-  // admin.initializeApp(configService.getFirebaseConfig());
+  const config = new DocumentBuilder()
+    .setTitle('Comic')
+    .setDescription('The Comic API description')
+    .setVersion('1.0')
+    .addTag('Comic')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   /// validate pipe
   app.useGlobalPipes(new ValidationPipe());

@@ -1,15 +1,13 @@
 FROM node:16
 
-WORKDIR /app
+WORKDIR /workspace
 
-COPY package*.json  yarn.lock /app
+COPY package.json yarn.lock /workspace/
 
-RUN yarn install
+RUN yarn
 
-COPY . /app
-
-RUN yarn run build
+COPY . .
 
 EXPOSE 8088
 
-CMD npm run start:prod
+CMD ["yarn", "run", "start:dev"]
